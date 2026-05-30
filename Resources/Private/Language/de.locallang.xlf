@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<xliff version="1.0">
-    <file source-language="en" target-language="de" date="2023-07-13T10:24:37Z">
-        <body>
-            <trans-unit id="message.invalid">
-                <source>Captcha is invalid. Please try again</source>
-                <target>Das Captcha ist ungültig. Bitte versuchen Sie es noch einmal.</target>
-            </trans-unit>
-        </body>
-    </file>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en" trgLang="de">
+  <file id="locallang">
+    <unit id="message.invalid">
+      <segment>
+        <source>Captcha is invalid. Please try again.</source>
+        <target>Das Captcha ist ungültig. Bitte versuchen Sie es erneut.</target>
+      </segment>
+    </unit>
+    <unit id="configuration_missing">
+      <segment>
+        <source>Friendly Captcha is not fully configured.</source>
+        <target>Friendly Captcha ist nicht vollständig konfiguriert.</target>
+      </segment>
+    </unit>
+  </file>
 </xliff>

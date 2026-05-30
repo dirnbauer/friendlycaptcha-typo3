@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace StudioMitte\FriendlyCaptcha\Service;
 
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Log\LoggerInterface;
 use StudioMitte\FriendlyCaptcha\Configuration;
@@ -66,10 +66,13 @@ class Api
             $this->logger->error($e->getMessage());
             return false;
         }
-        return (bool)$result->success;
+        return is_object($result) && property_exists($result, 'success') && (bool)$result->success;
     }
 
-    protected function request(string $method, string $url, array $options = [])
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function request(string $method, string $url, array $options = []): string|false
     {
         try {
             $result = $this->client->request($method, $url, $options);
@@ -90,11 +93,17 @@ class Api
 
     protected function getResponseFromRequest(): string
     {
-        /** @var ServerRequest $request */
         $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
-        if (!$request) {
+        if (!$request instanceof ServerRequest) {
             return '';
         }
-        return $request->getParsedBody()['frc-captcha-response'] ?? $request->getQueryParams()['frc-captcha-response'] ?? '';
+        $parsedBody = $request->getParsedBody();
+        if (is_array($parsedBody) && isset($parsedBody['frc-captcha-response'])) {
+            $response = $parsedBody['frc-captcha-response'];
+            return is_scalar($response) || $response instanceof \Stringable ? (string)$response : '';
+        }
+        $queryParams = $request->getQueryParams();
+        $response = $queryParams['frc-captcha-response'] ?? '';
+        return is_scalar($response) || $response instanceof \Stringable ? (string)$response : '';
     }
 }

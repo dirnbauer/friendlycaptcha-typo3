@@ -23,17 +23,21 @@ class Configuration
     public function __construct(?Site $site = null)
     {
         if ($site === null) {
-            $site = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
+            $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+            if ($request instanceof ServerRequest) {
+                $site = $request->getAttribute('site');
+            }
         }
-        if ($site === null) {
+        if (!$site instanceof Site) {
             return;
         }
+        /** @var array<string, mixed> $siteConfiguration */
         $siteConfiguration = $site->getConfiguration();
-        $this->siteKey = trim($siteConfiguration['friendlycaptcha_site_key'] ?? '');
-        $this->siteSecretKey = trim($siteConfiguration['friendlycaptcha_secret_key'] ?? '');
+        $this->siteKey = $this->getStringValue($siteConfiguration, 'friendlycaptcha_site_key');
+        $this->siteSecretKey = $this->getStringValue($siteConfiguration, 'friendlycaptcha_secret_key');
         $this->useEuPuzzleEndpoint = (bool)($siteConfiguration['friendlycaptcha_use_eu_puzzle_endpoint'] ?? false);
-        $this->verifyUrl = trim($siteConfiguration['friendlycaptcha_verify_url'] ?? '');
-        $this->jsPath = trim($siteConfiguration['friendlycaptcha_js_path'] ?? '');
+        $this->verifyUrl = $this->getStringValue($siteConfiguration, 'friendlycaptcha_verify_url');
+        $this->jsPath = $this->getStringValue($siteConfiguration, 'friendlycaptcha_js_path');
         $this->skipDevValidation = (bool)($siteConfiguration['friendlycaptcha_skip_dev_validation'] ?? false);
     }
 
@@ -80,12 +84,23 @@ class Configuration
 
     public function hasSkipHeaderValidation(): bool
     {
-        /** @var ServerRequest $request */
-        $request = $GLOBALS['TYPO3_REQUEST'];
-        $validationName = (string)($_ENV['FRIENDLYCAPTCHA_SKIP_HEADER_VALIDATION'] ?? '');
-        if (strlen($validationName) < 30) {
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        $validationName = $_ENV['FRIENDLYCAPTCHA_SKIP_HEADER_VALIDATION'] ?? '';
+        if (!is_string($validationName)) {
             return false;
         }
-        return $request && $request->hasHeader('X-FriendlyCaptcha-Skip-Validation') && in_array($validationName, $request->getHeader('X-FriendlyCaptcha-Skip-Validation'), true);
+        if (!$request instanceof ServerRequest || strlen($validationName) < 30) {
+            return false;
+        }
+        return $request->hasHeader('X-FriendlyCaptcha-Skip-Validation') && in_array($validationName, $request->getHeader('X-FriendlyCaptcha-Skip-Validation'), true);
+    }
+
+    /**
+     * @param array<string, mixed> $siteConfiguration
+     */
+    private function getStringValue(array $siteConfiguration, string $key): string
+    {
+        $value = $siteConfiguration[$key] ?? '';
+        return is_scalar($value) || $value instanceof \Stringable ? trim((string)$value) : '';
     }
 }

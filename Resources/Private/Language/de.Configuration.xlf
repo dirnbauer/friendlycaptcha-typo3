@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en" trgLang="de">
   <file id="configuration">
     <unit id="site.configuration.tab">
       <segment>
         <source>Friendly Captcha</source>
+        <target>Friendly Captcha</target>
       </segment>
     </unit>
     <unit id="site.configuration.site_key">
       <segment>
         <source>Site key</source>
+        <target>Site-Schluessel</target>
       </segment>
     </unit>
     <unit id="site.configuration.secret_key">
       <segment>
         <source>Secret key</source>
+        <target>Geheimer Schluessel</target>
       </segment>
     </unit>
     <unit id="site.configuration.verify_url">
       <segment>
         <source>Verify URL</source>
+        <target>Pruef-URL</target>
       </segment>
     </unit>
     <unit id="site.configuration.puzzle_endpoint">
       <segment>
         <source>Use EU puzzle endpoint</source>
+        <target>EU-Puzzle-Endpunkt verwenden</target>
       </segment>
     </unit>
     <unit id="site.configuration.js_path">
       <segment>
         <source>JavaScript path</source>
+        <target>JavaScript-Pfad</target>
       </segment>
     </unit>
     <unit id="site.configuration.skip_dev_validation">
       <segment>
         <source>Skip validation in Development context</source>
+        <target>Validierung im Development-Kontext ueberspringen</target>
       </segment>
     </unit>
     <unit id="site.configuration.skip_dev_validation.description">
       <segment>
         <source>Must never be used on a live website. Only works in Development context and can be useful for automated form testing.</source>
+        <target>Darf niemals auf einer Live-Website verwendet werden. Funktioniert nur im Development-Kontext und kann fuer automatisierte Formulartests hilfreich sein.</target>
       </segment>
     </unit>
   </file>

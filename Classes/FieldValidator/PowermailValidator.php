@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace StudioMitte\FriendlyCaptcha\FieldValidator;
 
+use In2code\Powermail\Domain\Model\Mail;
 use In2code\Powermail\Domain\Validator\AbstractValidator;
 use StudioMitte\FriendlyCaptcha\Service\Api;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -12,11 +13,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PowermailValidator extends AbstractValidator
 {
-    /**
-     * @param Mail $mail
-     */
-    public function isValid($mail): void
+    public function isValid(mixed $mail): void
     {
+        if (!$mail instanceof Mail) {
+            return;
+        }
         if (!$this->isFormWithCaptchaField($mail) || $this->isCaptchaCheckToSkip()) {
             return;
         }
@@ -30,7 +31,7 @@ class PowermailValidator extends AbstractValidator
         }
     }
 
-    protected function isFormWithCaptchaField($mail): bool
+    protected function isFormWithCaptchaField(Mail $mail): bool
     {
         foreach ($mail->getForm()->getPages() as $page) {
             foreach ($page->getFields() as $field) {
@@ -49,17 +50,15 @@ class PowermailValidator extends AbstractValidator
      */
     protected function isCaptchaCheckToSkip(): bool
     {
-        if (property_exists($this, 'flexForm')) {
-            $action = $this->getActionName();
-            $confirmationActive = $this->flexForm['settings']['flexform']['main']['confirmation'] === '1';
-            $optinActive = $this->flexForm['settings']['flexform']['main']['optin'] === '1';
-            if ($action === 'create' && $confirmationActive || $action === 'checkCreate' && $confirmationActive) {
-                return true;
-            }
+        $action = $this->getActionName();
+        $confirmationActive = ($this->flexForm['settings']['flexform']['main']['confirmation'] ?? '0') === '1';
+        $optinActive = ($this->flexForm['settings']['flexform']['main']['optin'] ?? '0') === '1';
+        if (($action === 'create' || $action === 'checkCreate') && $confirmationActive) {
+            return true;
+        }
 
-            if ($action === 'optinConfirm' && $optinActive) {
-                return true;
-            }
+        if ($action === 'optinConfirm' && $optinActive) {
+            return true;
         }
 
         return false;
@@ -70,17 +69,27 @@ class PowermailValidator extends AbstractValidator
      */
     protected function getActionName(): string
     {
-        /** @var ServerRequest $request */
-        $request = $GLOBALS['TYPO3_REQUEST'];
-        $pluginVariables = $request->getQueryParams()['tx_powermail_pi1'] ?? [];
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if (!$request instanceof ServerRequest) {
+            return '';
+        }
+        $queryParams = $request->getQueryParams();
+        $pluginVariables = $queryParams['tx_powermail_pi1'] ?? [];
+        if (!is_array($pluginVariables)) {
+            $pluginVariables = [];
+        }
 
         $requestBody = $request->getParsedBody();
         $postVariables = [];
         if (is_array($requestBody) && isset($requestBody['tx_powermail_pi1'])) {
             $postVariables = $requestBody['tx_powermail_pi1'];
+            if (!is_array($postVariables)) {
+                $postVariables = [];
+            }
         }
 
         ArrayUtility::mergeRecursiveWithOverrule($pluginVariables, $postVariables);
-        return $pluginVariables['action'];
+        $action = $pluginVariables['action'] ?? '';
+        return is_scalar($action) || $action instanceof \Stringable ? (string)$action : '';
     }
 }

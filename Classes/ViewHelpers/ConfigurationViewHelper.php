@@ -9,6 +9,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class ConfigurationViewHelper extends AbstractViewHelper
 {
+    /**
+     * @return array{siteKey: string, verifyUrl: string, useEuPuzzleEndpoint: bool, jsPath: string, enabled: bool}
+     */
     public function render(): array
     {
         $configuration = new Configuration();

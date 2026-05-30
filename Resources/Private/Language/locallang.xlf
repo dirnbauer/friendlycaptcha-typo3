@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<xliff version="1.0">
-    <file source-language="en" date="2023-07-13T10:24:37Z">
-        <header/>
-        <body>
-            <trans-unit id="message.invalid">
-                <source>Captcha is invalid. Please try again</source>
-            </trans-unit>
-			<trans-unit id="configuration_missing">
-				<source>The EXT:friendlycaptcha is not fully configured!</source>
-			</trans-unit>
-        </body>
-    </file>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en">
+  <file id="locallang">
+    <unit id="message.invalid">
+      <segment>
+        <source>Captcha is invalid. Please try again.</source>
+      </segment>
+    </unit>
+    <unit id="configuration_missing">
+      <segment>
+        <source>Friendly Captcha is not fully configured.</source>
+      </segment>
+    </unit>
+  </file>
 </xliff>
