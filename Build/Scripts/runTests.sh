@@ -173,6 +173,7 @@ Options:
             - rector: Run rector
             - functional: functional tests
             - lint: PHP linting
+            - phpstan: PHPStan static analysis
             - unit: PHP unit tests
 
     -a <mysqli|pdo_mysql>
@@ -223,18 +224,16 @@ Options:
             - 15    maintained until 2027-11-11
             - 16    maintained until 2028-11-09
 
-    -t <12|13>
+    -t <14>
         Only with -s composerInstall|composerInstallMin|composerInstallMax
         Specifies the TYPO3 CORE Version to be used
-            - 12: use TYPO3 v12 (default)
-            - 13: use TYPO3 v13
+            - 14: use TYPO3 v14 (default)
 
-    -p <8.1|8.2|8.3|8.4>
+    -p <8.3|8.4|8.5>
         Specifies the PHP minor version to be used
-            - 8.1: use PHP 8.1 (default)
-            - 8.2: use PHP 8.2
             - 8.3: use PHP 8.3
-            - 8.4: use PHP 8.4
+            - 8.4: use PHP 8.4 (default)
+            - 8.5: use PHP 8.5
 
     -e "<phpunit options>"
         Only with -s docsGenerate|functional|unit
@@ -277,15 +276,15 @@ Examples:
     # Run all core units tests and enable xdebug (have a PhpStorm listening on port 9003!)
     ./Build/Scripts/runTests.sh -x -s unit
 
-    # Run unit tests in phpunit verbose mode with xdebug on PHP 8.1 and filter for test canRetrieveValueWithGP
-    ./Build/Scripts/runTests.sh -x -p 8.1 -- --filter 'classCanBeRegistered'
+    # Run unit tests in phpunit verbose mode with xdebug on PHP 8.4 and filter for test canRetrieveValueWithGP
+    ./Build/Scripts/runTests.sh -x -p 8.4 -- --filter 'classCanBeRegistered'
 
     # Run functional tests in phpunit with a filtered test method name in a specified file
     # example will currently execute two tests, both of which start with the search term
     ./Build/Scripts/runTests.sh -s functional -- --filter 'findRecordByImportSource' Tests/Functional/Repository/CategoryRepositoryTest.php
 
-    # Run functional tests on postgres with xdebug, php 8.1 and execute a restricted set of tests
-    ./Build/Scripts/runTests.sh -x -p 8.1 -s functional -d postgres -- Tests/Functional/Repository/CategoryRepositoryTest.php
+    # Run functional tests on postgres with xdebug, php 8.4 and execute a restricted set of tests
+    ./Build/Scripts/runTests.sh -x -p 8.4 -s functional -d postgres -- Tests/Functional/Repository/CategoryRepositoryTest.php
 
     # Run functional tests on postgres 11
     ./Build/Scripts/runTests.sh -s functional -d postgres -i 11
@@ -307,17 +306,17 @@ ROOT_DIR="${PWD}"
 
 # Option defaults
 TEST_SUITE=""
-TYPO3_VERSION="12"
+TYPO3_VERSION="14"
 DBMS="sqlite"
 DBMS_VERSION=""
-PHP_VERSION="8.1"
+PHP_VERSION="8.4"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
 EXTRA_TEST_OPTIONS=""
 DRY_RUN=0
 DATABASE_DRIVER=""
 CONTAINER_BIN=""
-COMPOSER_ROOT_VERSION="12.0.0-dev"
+COMPOSER_ROOT_VERSION="14.0.0-dev"
 CONTAINER_INTERACTIVE="-it --init"
 HOST_UID=$(id -u)
 HOST_PID=$(id -g)
@@ -357,7 +356,7 @@ while getopts "a:b:s:d:i:p:e:t:xy:nhu" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3|8.4)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.3|8.4|8.5)$ ]]; then
                 INVALID_OPTIONS+=("-p ${OPTARG}")
             fi
             ;;
@@ -366,7 +365,7 @@ while getopts "a:b:s:d:i:p:e:t:xy:nhu" OPT; do
             ;;
         t)
             TYPO3_VERSION=${OPTARG}
-            if ! [[ ${TYPO3_VERSION} =~ ^(12|13)$ ]]; then
+            if ! [[ ${TYPO3_VERSION} =~ ^(14)$ ]]; then
                 INVALID_OPTIONS+=("-t ${OPTARG}")
             fi
             ;;
@@ -504,13 +503,9 @@ case ${TEST_SUITE} in
         cleanComposer
         stashComposerFiles
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-highest-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "
-            if [ ${TYPO3_VERSION} -eq 12 ]; then
+            if [ ${TYPO3_VERSION} -eq 14 ]; then
               composer require --no-ansi --no-interaction --no-progress --no-install \
-                typo3/cms-core:^12.4.2 || exit 1
-            fi
-            if [ ${TYPO3_VERSION} -eq 13 ]; then
-              composer require --no-ansi --no-interaction --no-progress --no-install \
-                typo3/cms-core:^13.1 || exit 1
+                typo3/cms-core:^14.3 || exit 1
             fi
             composer update --no-progress --no-interaction  || exit 1
             composer show || exit 1
@@ -522,13 +517,9 @@ case ${TEST_SUITE} in
         cleanComposer
         stashComposerFiles
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-lowest-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "
-            if [ ${TYPO3_VERSION} -eq 12 ]; then
+            if [ ${TYPO3_VERSION} -eq 14 ]; then
               composer require --no-ansi --no-interaction --no-progress --no-install \
-                typo3/cms-core:^12.4.2 || exit 1
-            fi
-            if [ ${TYPO3_VERSION} -eq 13 ]; then
-              composer require --no-ansi --no-interaction --no-progress --no-install \
-                typo3/cms-core:^13.1 || exit 1
+                typo3/cms-core:^14.3 || exit 1
             fi
             composer update --no-ansi --no-interaction --no-progress --with-dependencies --prefer-lowest || exit 1
             composer show || exit 1
@@ -586,6 +577,11 @@ case ${TEST_SUITE} in
     lint)
         COMMAND="php -v | grep '^PHP'; find . -name '*.php' ! -path '*.Build/*' -print0 | xargs -0 -n1 -P4 php -dxdebug.mode=off -l >/dev/null"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-command-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "${COMMAND}"
+        SUITE_EXIT_CODE=$?
+        ;;
+    phpstan)
+        COMMAND="php -dxdebug.mode=off .Build/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=1G"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
     rector)

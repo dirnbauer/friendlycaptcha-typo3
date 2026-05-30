@@ -1,0 +1,14 @@
+includes:
+  - .Build/vendor/saschaegerer/phpstan-typo3/extension.neon
+  - .Build/vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+  level: max
+  paths:
+    - Classes
+    - Tests
+  bootstrapFiles:
+    - .Build/vendor/autoload.php
+  tmpDir: .Build/phpstan
+  checkDynamicProperties: true
+  reportUnmatchedIgnoredErrors: true
