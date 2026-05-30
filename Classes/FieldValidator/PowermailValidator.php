@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace StudioMitte\FriendlyCaptcha\FieldValidator;
 
+use In2code\Powermail\Domain\Model\Field;
+use In2code\Powermail\Domain\Model\Form;
 use In2code\Powermail\Domain\Model\Mail;
+use In2code\Powermail\Domain\Model\Page;
 use In2code\Powermail\Domain\Validator\AbstractValidator;
 use StudioMitte\FriendlyCaptcha\Service\Api;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 class PowermailValidator extends AbstractValidator
 {
@@ -33,9 +37,22 @@ class PowermailValidator extends AbstractValidator
 
     protected function isFormWithCaptchaField(Mail $mail): bool
     {
-        foreach ($mail->getForm()->getPages() as $page) {
+        $form = $mail->getForm();
+        if ($form instanceof LazyLoadingProxy) {
+            $form = $form->_loadRealInstance();
+        }
+        if (!$form instanceof Form) {
+            return false;
+        }
+
+        $pages = $form->getPages();
+
+        foreach ($pages as $page) {
+            if (!$page instanceof Page) {
+                continue;
+            }
             foreach ($page->getFields() as $field) {
-                if ($field->getType() === 'friendlycaptcha') {
+                if ($field instanceof Field && $field->getType() === 'friendlycaptcha') {
                     return true;
                 }
             }
@@ -51,8 +68,9 @@ class PowermailValidator extends AbstractValidator
     protected function isCaptchaCheckToSkip(): bool
     {
         $action = $this->getActionName();
-        $confirmationActive = ($this->flexForm['settings']['flexform']['main']['confirmation'] ?? '0') === '1';
-        $optinActive = ($this->flexForm['settings']['flexform']['main']['optin'] ?? '0') === '1';
+        $mainFlexFormSettings = $this->getMainFlexFormSettings();
+        $confirmationActive = ($mainFlexFormSettings['confirmation'] ?? '0') === '1';
+        $optinActive = ($mainFlexFormSettings['optin'] ?? '0') === '1';
         if (($action === 'create' || $action === 'checkCreate') && $confirmationActive) {
             return true;
         }
@@ -62,6 +80,27 @@ class PowermailValidator extends AbstractValidator
         }
 
         return false;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getMainFlexFormSettings(): array
+    {
+        $settings = $this->flexForm['settings'] ?? [];
+        if (!is_array($settings)) {
+            return [];
+        }
+        $flexForm = $settings['flexform'] ?? [];
+        if (!is_array($flexForm)) {
+            return [];
+        }
+        $main = $flexForm['main'] ?? [];
+        if (!is_array($main)) {
+            return [];
+        }
+        /** @var array<string, mixed> $main */
+        return $main;
     }
 
     /**
