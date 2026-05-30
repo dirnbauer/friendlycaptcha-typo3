@@ -37,10 +37,7 @@ class PowermailValidator extends AbstractValidator
 
     protected function isFormWithCaptchaField(Mail $mail): bool
     {
-        $form = $mail->getForm();
-        if ($form instanceof LazyLoadingProxy) {
-            $form = $form->_loadRealInstance();
-        }
+        $form = $this->resolveLazyLoadingProxy($mail->getForm());
         if (!$form instanceof Form) {
             return false;
         }
@@ -48,10 +45,12 @@ class PowermailValidator extends AbstractValidator
         $pages = $form->getPages();
 
         foreach ($pages as $page) {
+            $page = $this->resolveLazyLoadingProxy($page);
             if (!$page instanceof Page) {
                 continue;
             }
             foreach ($page->getFields() as $field) {
+                $field = $this->resolveLazyLoadingProxy($field);
                 if ($field instanceof Field && $field->getType() === 'friendlycaptcha') {
                     return true;
                 }
@@ -87,20 +86,31 @@ class PowermailValidator extends AbstractValidator
      */
     protected function getMainFlexFormSettings(): array
     {
+        /** @var mixed $settings */
         $settings = $this->flexForm['settings'] ?? [];
         if (!is_array($settings)) {
             return [];
         }
+        /** @var mixed $flexForm */
         $flexForm = $settings['flexform'] ?? [];
         if (!is_array($flexForm)) {
             return [];
         }
+        /** @var mixed $main */
         $main = $flexForm['main'] ?? [];
         if (!is_array($main)) {
             return [];
         }
         /** @var array<string, mixed> $main */
         return $main;
+    }
+
+    protected function resolveLazyLoadingProxy(mixed $value): mixed
+    {
+        if ($value instanceof LazyLoadingProxy) {
+            return $value->_loadRealInstance();
+        }
+        return $value;
     }
 
     /**
