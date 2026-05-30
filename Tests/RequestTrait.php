@@ -25,4 +25,13 @@ trait RequestTrait
             ->withAttribute('site', $site)
             ->withAttribute('language', $siteLanguage);
     }
+
+    public static function getRequest(): ServerRequest
+    {
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if (!$request instanceof ServerRequest) {
+            throw new \UnexpectedValueException('TYPO3_REQUEST is not initialized as ServerRequest.', 1748549630);
+        }
+        return $request;
+    }
 }
