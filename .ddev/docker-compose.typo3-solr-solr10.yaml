@@ -1,0 +1,3 @@
+services:
+  typo3-solr:
+    command: ["solr", "start", "-f", "--user-managed"]
