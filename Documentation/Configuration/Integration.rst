@@ -1,6 +1,6 @@
 ..  include:: /Includes.rst.txt
 ..  index:: Configuration
-..  _configuration-general:
+..  _configuration-integration:
 
 ===========
 Integration
@@ -32,6 +32,6 @@ If you prefer to use the EU endpoint, enter `https://eu.frcapi.com/api/v2/captch
 Working with automated tests
 ============================
 If you are using automated tests you might want to skip the captcha.
-This can be achieved by setting the folloowing ENV variable `FRIENDLYCAPTCHA_SKIP_HEADER_VALIDATION` to a string with minimum length of 30.
+This can be achieved by setting the following ENV variable `FRIENDLYCAPTCHA_SKIP_HEADER_VALIDATION` to a string with minimum length of 30.
 
 Now provide the same string with with the request header `X-FriendlyCaptcha-Skip-Validation`.

@@ -7,48 +7,26 @@
 EXT:powermail
 =============
 
-Friendly Captcha can be used in EXT:powermail by following these steps:
+Friendly Captcha can be used in EXT:powermail after a public TYPO3 14
+compatible Powermail release is available.
 
 Setup
 -----
 
-TypoScript and Page TsConfig need to be extended.
+The TYPO3 site must depend on the Friendly Captcha site set.
 
-Add TypoScript
-~~~~~~~~~~~~~~
+Add the site set
+~~~~~~~~~~~~~~~~
 
-Either import the TypoScript manually in your site package or add the following line to your TypoScript template:
+Add the set in the site configuration:
 
-..  code-block:: typoscript
+..  code-block:: yaml
 
-    @import 'EXT:friendlycaptcha_official/Configuration/TypoScript/Powermail/setup.typoscript'
+    dependencies:
+      - studiomitte/friendlycaptcha
 
-or select the TypoScript in your TypoScript record
-
-..  figure:: /Images/integration/powermail-typoscript.png
-    :class: with-shadow
-    :alt: Add TypoScript
-    :width: 450px
-
-    Add TypoScript
-
-Add Page TsConfig
-~~~~~~~~~~~~~~~~~
-
-Either import the TsConfig manually in your site package or add the following line to your TsConfig files :
-
-..  code-block:: typoscript
-
-    @import 'EXT:friendlycaptcha_official/Configuration/PageTsConfig/powermail.typoscript'
-
-or select the TypoScript in your TypoScript record
-
-..  figure:: /Images/integration/powermail-page-tsconfig.png
-    :class: with-shadow
-    :alt: Add Page TsConfig
-    :width: 450px
-
-    Add Page TsConfig
+The set loads `Configuration/Sets/Friendlycaptcha/setup.typoscript` and
+`Configuration/Sets/Friendlycaptcha/page.tsconfig`.
 
 Usage
 -----

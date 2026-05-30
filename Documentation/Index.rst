@@ -10,7 +10,7 @@ TYPO3 Extension friendlycaptcha_official
     friendlycaptcha_official
 
 :Package name:
-    studiomitte/friendlycaptcha-typo3
+    studiomitte/friendlycaptcha
 
 :Version:
     |release|
@@ -46,7 +46,6 @@ TYPO3 Extension friendlycaptcha_official
     Configuration/Index
     Using/Index
     V2_Migration/Index
-    v2.1.0_Update/Index
 
 ..  Meta Menu
 
