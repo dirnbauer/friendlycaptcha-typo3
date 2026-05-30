@@ -22,7 +22,12 @@ Use Composer to install this extension:
 
 ..  code-block:: bash
 
-    composer require studiomitte/friendlycaptcha
+    composer config repositories.friendlycaptcha vcs https://github.com/dirnbauer/friendlycaptcha-typo3
+    composer require studiomitte/friendlycaptcha:"dev-v14"
+
+The explicit `dev-v14` constraint installs the TYPO3 14 branch. Use this while
+the public Packagist package still exposes older TYPO3 12/13 tags as stable
+releases.
 
 Site set
 ========

@@ -24,8 +24,13 @@ Supported form extensions:
 ### Installation
 
 ```console
-composer require studiomitte/friendlycaptcha
+composer config repositories.friendlycaptcha vcs https://github.com/dirnbauer/friendlycaptcha-typo3
+composer require studiomitte/friendlycaptcha:"dev-v14"
 ```
+
+The explicit `dev-v14` constraint makes the TYPO3 14 branch the installed
+extension version. This is required while the public Packagist package still
+offers older TYPO3 12/13 tags as stable releases.
 
 Configure the extension in the TYPO3 site configuration after installation.
 The Friendly Captcha site configuration tab contains the site key, secret key,
