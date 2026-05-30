@@ -8,7 +8,9 @@ EXT:powermail
 =============
 
 Friendly Captcha can be used in EXT:powermail after a public TYPO3 14
-compatible Powermail release is available.
+compatible Powermail release is available. The integration files are included
+in this extension, but `in2code/powermail` is not required by Composer until a
+compatible public release exists.
 
 Setup
 -----
@@ -21,6 +23,7 @@ Add the site set
 Add the set in the site configuration:
 
 ..  code-block:: yaml
+    :caption: config/sites/<site-identifier>/config.yaml
 
     dependencies:
       - studiomitte/friendlycaptcha
@@ -28,10 +31,14 @@ Add the set in the site configuration:
 The set loads `Configuration/Sets/Friendlycaptcha/setup.typoscript` and
 `Configuration/Sets/Friendlycaptcha/page.tsconfig`.
 
+Do not add a static TypoScript include or manual Page TSconfig include for
+TYPO3 14. The site set is the supported setup path.
+
 Usage
 -----
 
-It is now possible to select Friendly Captcha as a field type in a powermail field record
+After setup, select Friendly Captcha as a field type in a Powermail field
+record.
 
 ..  figure:: /Images/integration/powermail-field.png
     :class: with-shadow

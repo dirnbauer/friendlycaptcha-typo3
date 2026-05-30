@@ -17,4 +17,9 @@ in the section **Advanced Elements**.
 
     Field "Friendly Captcha"
 
-The automatically used template can be found at `EXT:friendlycaptcha_official/Resources/Private/Form/Partials/Friendlycaptcha.html`.
+The EXT:form integration is registered globally for TYPO3 14 because the Form
+backend module does not have a site context while loading its YAML
+configuration. No site set include is required for EXT:form.
+
+The automatically used template can be found at
+`EXT:friendlycaptcha_official/Resources/Private/Form/Partials/Friendlycaptcha.html`.

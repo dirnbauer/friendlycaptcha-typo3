@@ -31,7 +31,13 @@ TYPO3 Extension friendlycaptcha_official
 
 ----
 
-<abstract>
+Friendly Captcha integrates Friendly Captcha V2 with TYPO3 14. It supports
+EXT:form, provides an API for custom integrations, and contains an optional
+site set for EXT:powermail once a public TYPO3 14 compatible Powermail release
+is available.
+
+Version |release| is TYPO3 14 only. It requires TYPO3 14.3 or later and PHP
+8.3, 8.4, or 8.5. TYPO3 12 and TYPO3 13 are no longer supported.
 
 ----
 

@@ -6,9 +6,11 @@
 General configuration
 =====================
 
-It is required to have an account at https://friendlycaptcha.com/ before being able to use this extension!
+You need a Friendly Captcha account before using this extension. Create the
+account at https://friendlycaptcha.com/.
 
-After creating the account, you need to setup a so called *Application*
+After creating the account, create an *Application* in the Friendly Captcha
+dashboard.
 
 ..  figure:: /Images/setup/application.png
     :class: with-shadow
@@ -18,9 +20,11 @@ After creating the account, you need to setup a so called *Application*
     Creation of an application
 
 ..  note::
-    This version on the Plugin supports only FriendlyCaptcha V2. The V2 version has to be enabled in your Application
+    Version |release| supports only Friendly Captcha V2. Enable V2 in the
+    Friendly Captcha application before configuring TYPO3.
 
-and afterwards you need to create new a new *API Key*. Please copy the generated key as you need it later!
+Afterwards, create an *API Key*. Copy the generated key because it is needed
+in the TYPO3 site configuration.
 
 ..  figure:: /Images/setup/apikey.png
     :class: with-shadow
@@ -28,5 +32,4 @@ and afterwards you need to create new a new *API Key*. Please copy the generated
     :width: 450px
 
     Creation of an API Key
-
 
