@@ -1,11 +1,10 @@
-<svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 430 500"
-     xmlns="http://www.w3.org/2000/svg">
-    <path
-        d="m426.777 73.223c-46.884-46.884-110.473-73.223-176.777-73.223-137.979 0-250 112.021-250 250s112.021 250 250 250c66.304 0 129.893-26.339 176.777-73.223l-53.033-53.033c-32.819 32.819-77.331 51.256-123.744 51.256-96.585 0-175-78.415-175-175s78.415-175 175-175c46.413 0 90.925 18.437 123.744 51.256z"
-        fill="#ffab00"/>
-    <path
-        d="m73.223 426.777c46.884 46.884 110.473 73.223 176.777 73.223s129.893-26.339 176.777-73.223l-53.033-53.033c-32.819 32.819-77.331 51.256-123.744 51.256s-90.925-18.437-123.744-51.256z"
-        fill="#ffc400"/>
-    <circle cx="175" cy="250" fill="#ffab00" r="37.5"/>
-    <circle cx="325" cy="250" fill="#ffab00" r="37.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="6" y="6" width="52" height="52" rx="10" fill="#f8fafc"/>
+  <rect x="6.75" y="6.75" width="50.5" height="50.5" rx="9.25" fill="none" stroke="#d0d7de" stroke-width="1.5"/>
+  <path fill="#1f2937" fill-rule="evenodd" d="M24 24v-4a8 8 0 0 1 16 0v4h-5v-4a3 3 0 0 0-6 0v4h-5Z"/>
+  <rect x="19" y="24" width="26" height="18" rx="4" fill="#1f2937"/>
+  <rect x="16" y="47" width="32" height="5" rx="2.5" fill="#1f2937"/>
+  <rect x="23" y="49" width="18" height="3" rx="1.5" fill="#1f2937" opacity=".55"/>
+  <circle cx="32" cy="30" r="3" fill="#ff8700"/>
+  <rect x="30" y="31" width="4" height="7" rx="2" fill="#ff8700"/>
 </svg>
