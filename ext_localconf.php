@@ -1,12 +1,7 @@
 <?php
 
-defined('TYPO3') or die();
-
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('form')) {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
-        'friendlycaptcha_official',
-        'setup',
-        '
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup('
 # Settings for Frontend
 plugin.tx_form.settings.yamlConfigurations {
     1689150041921 = EXT:friendlycaptcha_official/Configuration/Yaml/FormSetup.yaml
@@ -15,8 +10,11 @@ plugin.tx_form.settings.yamlConfigurations {
 module.tx_form.settings.yamlConfigurations {
     1689150041921 = EXT:friendlycaptcha_official/Configuration/Yaml/FormSetup.yaml
 }
-',
-    );
+');
+}
+
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('powermail')) {
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup('@import "EXT:friendlycaptcha_official/Configuration/TypoScript/Powermail/setup.typoscript"');
 }
 
 if (!isset($GLOBALS['TYPO3_CONF_VARS']['LOG']['StudioMitte']['FriendlyCaptcha']['writerConfiguration'])) {

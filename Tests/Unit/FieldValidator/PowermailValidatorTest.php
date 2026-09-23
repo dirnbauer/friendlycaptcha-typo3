@@ -8,7 +8,6 @@ use In2code\Powermail\Domain\Model\Field;
 use In2code\Powermail\Domain\Model\Form;
 use In2code\Powermail\Domain\Model\Mail;
 use In2code\Powermail\Domain\Model\Page;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\Test;
 use StudioMitte\FriendlyCaptcha\FieldValidator\PowermailValidator;
 use StudioMitte\FriendlyCaptcha\Service\Api;
@@ -17,16 +16,23 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\BaseTestCase;
 
-#[AllowMockObjectsWithoutExpectations]
 class PowermailValidatorTest extends BaseTestCase
 {
     use RequestTrait;
+
+    protected function setUp(): void
+    {
+        if (!\Composer\InstalledVersions::isInstalled('in2code/powermail')) {
+            self::markTestSkipped('in2code/powermail is not installed.');
+        }
+        parent::setUp();
+    }
 
     #[Test]
     public function validateDoesNotAddErrorIfVerified(): void
     {
         self::setupRequest();
-        $GLOBALS['TYPO3_REQUEST'] = self::getRequest()
+        $GLOBALS['TYPO3_REQUEST'] = $GLOBALS['TYPO3_REQUEST']
             ->withParsedBody(['tx_powermail_pi1' => ['action' => 'create']]);
 
         $mockedValidator = $this->getAccessibleMock(PowermailValidator::class, ['addError'], [], '', false);
@@ -47,7 +53,7 @@ class PowermailValidatorTest extends BaseTestCase
     public function validateAddsErrorIfNotVerified(): void
     {
         self::setupRequest();
-        $GLOBALS['TYPO3_REQUEST'] = self::getRequest()
+        $GLOBALS['TYPO3_REQUEST'] = $GLOBALS['TYPO3_REQUEST']
             ->withParsedBody(['tx_powermail_pi1' => ['action' => 'create']]);
 
         $mockedValidator = $this->getAccessibleMock(PowermailValidator::class, ['addError', 'translateErrorMessage'], [], '', false);
@@ -71,7 +77,7 @@ class PowermailValidatorTest extends BaseTestCase
     public function validateSkipsCheckIfNoFormWithCaptchaField(): void
     {
         self::setupRequest();
-        $GLOBALS['TYPO3_REQUEST'] = self::getRequest()
+        $GLOBALS['TYPO3_REQUEST'] = $GLOBALS['TYPO3_REQUEST']
             ->withParsedBody(['tx_powermail_pi1' => ['action' => 'create']]);
 
         $mockedValidator = $this->getAccessibleMock(PowermailValidator::class, ['addError'], [], '', false);
