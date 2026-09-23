@@ -6,9 +6,7 @@
 Installation
 ============
 
-This extension is installed with Composer. Version |release| requires TYPO3
-14.3 or later and PHP 8.3 to 8.5. TYPO3 12 and TYPO3 13 are no longer
-supported by this branch.
+This extension can be installed as most of all other extensions of TYPO3 too.
 
 ..  note::
     To be able to use the extension, it is **required** to configure it after the installation.
@@ -18,26 +16,15 @@ supported by this branch.
 Composer
 ========
 
-Use Composer to install this extension:
+Use composer to install this extension by using
 
-..  code-block:: bash
+.. code-block:: bash
 
-    composer config repositories.friendlycaptcha vcs https://github.com/dirnbauer/friendlycaptcha-typo3
-    composer require studiomitte/friendlycaptcha:"dev-v14"
+    composer require studiomitte/friendlycaptcha
 
-The explicit `dev-v14` constraint installs the TYPO3 14 branch. Use this while
-the public Packagist package still exposes older TYPO3 12/13 tags as stable
-releases.
+Extension Manager
+=================
 
-Site set
-========
+Use the TYPO3 Extension Manager to install this extension.
 
-Include the site set `studiomitte/friendlycaptcha` in your site
-configuration if you use the optional Powermail integration. The set loads
-the extension TypoScript and Page TSconfig for the site.
-
-The EXT:form integration is registered globally because the TYPO3 Form
-backend module needs the YAML configuration without a page context.
-
-No static TypoScript template include or manual Page TSconfig include is needed
-for TYPO3 14. Use the site set instead.
+Search for `friendlycaptcha_official` and install the extension.

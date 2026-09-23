@@ -7,38 +7,53 @@
 EXT:powermail
 =============
 
-Friendly Captcha can be used in EXT:powermail after a public TYPO3 14
-compatible Powermail release is available. The integration files are included
-in this extension, but `in2code/powermail` is not required by Composer until a
-compatible public release exists.
+Friendly Captcha can be used in EXT:powermail by following these steps:
 
 Setup
 -----
 
-The TYPO3 site must depend on the Friendly Captcha site set.
+TypoScript and Page TsConfig need to be extended.
 
-Add the site set
-~~~~~~~~~~~~~~~~
+Add TypoScript
+~~~~~~~~~~~~~~
 
-Add the set in the site configuration:
+Either import the TypoScript manually in your site package or add the following line to your TypoScript template:
 
-..  code-block:: yaml
-    :caption: config/sites/<site-identifier>/config.yaml
+..  code-block:: typoscript
 
-    dependencies:
-      - studiomitte/friendlycaptcha
+    @import 'EXT:friendlycaptcha_official/Configuration/TypoScript/Powermail/setup.typoscript'
 
-The set loads `Configuration/Sets/Friendlycaptcha/setup.typoscript` and
-`Configuration/Sets/Friendlycaptcha/page.tsconfig`.
+or select the TypoScript in your TypoScript record
 
-Do not add a static TypoScript include or manual Page TSconfig include for
-TYPO3 14. The site set is the supported setup path.
+..  figure:: /Images/integration/powermail-typoscript.png
+    :class: with-shadow
+    :alt: Add TypoScript
+    :width: 450px
+
+    Add TypoScript
+
+Add Page TsConfig
+~~~~~~~~~~~~~~~~~
+
+Either import the TsConfig manually in your site package or add the following line to your TsConfig files :
+
+..  code-block:: typoscript
+
+    @import 'EXT:friendlycaptcha_official/Configuration/PageTsConfig/powermail.typoscript'
+
+or select the TypoScript in your TypoScript record
+
+..  figure:: /Images/integration/powermail-page-tsconfig.png
+    :class: with-shadow
+    :alt: Add Page TsConfig
+    :width: 450px
+
+    Add Page TsConfig
 
 Usage
 -----
 
-After setup, select Friendly Captcha as a field type in a Powermail field
-record.
+It is now possible to select Friendly Captcha as a field type in a powermail field record
 
 ..  figure:: /Images/integration/powermail-field.png
     :class: with-shadow
