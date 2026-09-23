@@ -4,6 +4,14 @@
 	"type": "typo3-cms-extension",
 	"homepage": "https://www.studiomitte.com",
 	"license": "GPL-2.0-or-later",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/dirnbauer/powermail.git",
+			"canonical": false,
+			"no-api": true
+		}
+	],
 	"require": {
 		"typo3/cms-core": "^12.4.5 || ^13.4 || ^14.3"
 	},
@@ -15,7 +23,10 @@
 		"friendsofphp/php-cs-fixer": "^3.93",
 		"webmozart/assert": "^1.11.0",
 		"typo3/testing-framework": "^8.2 || ^9.0",
-		"in2code/powermail": "^12 || ^13 || ^14"
+		"in2code/powermail": "^12 || ^13 || ^14",
+		"phpstan/phpstan": "^1.10 || ^2.1",
+		"phpstan/phpstan-phpunit": "^1.4 || ^2.0",
+		"saschaegerer/phpstan-typo3": "^1.10 || ^2.0 || ^3.0"
 	},
 	"suggest": {
 		"in2code/powermail": "Support for EXT:powermail",
@@ -45,7 +56,8 @@
 		"csfix": "php ./.Build/bin/php-cs-fixer fix  -v --config ./Build/php-cs-fixer/php-cs-fixer.php ./",
 		"post-autoload-dump": [
 			"TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-		]
+		],
+		"phpstan": "php ./.Build/bin/phpstan analyse --configuration phpstan.neon --memory-limit 1G"
 	},
 	"extra": {
 		"typo3/cms": {

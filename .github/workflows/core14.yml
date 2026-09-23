@@ -26,5 +26,9 @@ jobs:
       - name: Validate code against CGL
         run: PHP_CS_FIXER_IGNORE_ENV=1 Build/Scripts/runTests.sh -t 14 -p 8.4 -s cgl -n
 
+      - name: Static analysis
+        if: matrix.composerInstall == 'composerInstallHighest'
+        run: Build/Scripts/runTests.sh -t 14 -p ${{ matrix.php }} -s phpstan
+
       - name: Unit Tests
         run: Build/Scripts/runTests.sh -t 14 -p ${{ matrix.php }} -s unit

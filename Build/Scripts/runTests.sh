@@ -173,6 +173,7 @@ Options:
             - rector: Run rector
             - functional: functional tests
             - lint: PHP linting
+            - phpstan: PHPStan static analysis
             - unit: PHP unit tests
 
     -a <mysqli|pdo_mysql>
@@ -516,8 +517,6 @@ case ${TEST_SUITE} in
                 typo3/cms-core:^13.1 || exit 1
             fi
             if [ ${TYPO3_VERSION} -eq 14 ]; then
-              composer remove --dev --no-ansi --no-interaction --no-progress --no-update \
-                in2code/powermail || exit 1
               composer require --no-ansi --no-interaction --no-progress --no-install \
                 typo3/cms-core:^14.3 || exit 1
             fi
@@ -541,8 +540,6 @@ case ${TEST_SUITE} in
                 typo3/cms-core:^13.1 || exit 1
             fi
             if [ ${TYPO3_VERSION} -eq 14 ]; then
-              composer remove --dev --no-ansi --no-interaction --no-progress --no-update \
-                in2code/powermail || exit 1
               composer require --no-ansi --no-interaction --no-progress --no-install \
                 typo3/cms-core:^14.3 || exit 1
             fi
@@ -602,6 +599,11 @@ case ${TEST_SUITE} in
     lint)
         COMMAND="php -v | grep '^PHP'; find . -name '*.php' ! -path '*.Build/*' -print0 | xargs -0 -n1 -P4 php -dxdebug.mode=off -l >/dev/null"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-command-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "${COMMAND}"
+        SUITE_EXIT_CODE=$?
+        ;;
+    phpstan)
+        COMMAND="php -dxdebug.mode=off .Build/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=1G --no-progress"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/bash -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
     rector)

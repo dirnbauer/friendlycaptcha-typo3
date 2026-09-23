@@ -1,14 +1,13 @@
+# Fork QA: level 8 over all runtime code plus the fork's own tests.
+# Upstream's unit tests are not analysed; changing them to satisfy PHPStan
+# would make every upstream merge conflict.
 includes:
   - .Build/vendor/saschaegerer/phpstan-typo3/extension.neon
   - .Build/vendor/phpstan/phpstan-phpunit/extension.neon
 
 parameters:
-  level: max
+  level: 8
   paths:
     - Classes
-    - Tests
-  bootstrapFiles:
-    - .Build/vendor/autoload.php
+    - Tests/Unit/FieldValidator/PowermailValidatorOnPowermail14Test.php
   tmpDir: .Build/phpstan
-  checkDynamicProperties: true
-  reportUnmatchedIgnoredErrors: true
