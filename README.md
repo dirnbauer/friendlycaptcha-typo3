@@ -12,6 +12,46 @@
 
 This extension integrations the GDPR-compliant captcha service of [**Friendly Captcha**](https://friendlycaptcha.com/) into TYPO3.
 
+## Fork notes
+
+This is webconsulting's fork of [studiomitte/friendlycaptcha-typo3](https://github.com/studiomitte/friendlycaptcha-typo3).
+The Composer package name stays `studiomitte/friendlycaptcha`. Branch `main` is upstream `main` (currently 2.3.0) plus
+a fix that upstream 2.3.0 lacks when it validates Powermail forms on TYPO3 14:
+
+- `PowermailValidator` resolves Extbase lazy-loading proxies itself. Powermail 14 declares `Mail::$form`,
+  `Form::$pages` and `Page::$fields` lazy. The validator also skips the check cleanly when a mail has no form, where
+  upstream fails with "Call to a member function getPages() on null".
+- It reads the plugin FlexForm and the `action` argument defensively. Powermail 14 leaves the validator's FlexForm
+  empty when the plugin has none, for example when a form is rendered through TypoScript, and upstream then raises a
+  warning for every missing key. A request without `tx_powermail_pi1[action]` makes upstream's `getActionName()`
+  throw a `TypeError`.
+- `Configuration` and `Api` cope with a missing `TYPO3_REQUEST` (CLI, scheduler, MCP writes) and with non-string
+  configuration values. `Api` type-hints the Guzzle client whose `request()` method it calls.
+
+`Tests/Unit/FieldValidator/PowermailValidatorOnPowermail14Test.php` covers these cases; run against upstream's
+validator, it fails. Smaller additions:
+
+- a German translation of the site configuration labels;
+- TYPO3 14 style extension icons;
+- PHPStan level 8 (`phpstan.neon`, `Build/Scripts/runTests.sh -s phpstan`);
+- a dev requirement on `in2code/powermail` that resolves to [dirnbauer/powermail](https://github.com/dirnbauer/powermail)
+  on TYPO3 14, so the Powermail tests run there instead of being skipped.
+
+Installing the fork:
+
+```json
+{
+    "repositories": [{"type": "vcs", "url": "https://github.com/dirnbauer/friendlycaptcha-typo3.git"}],
+    "require": {"studiomitte/friendlycaptcha": "~2.3.0.1"}
+}
+```
+
+Release tags have four parts, `<upstream version>.<fork revision>`: `2.3.0.1` is upstream 2.3.0 with the fork's
+first revision on top. `~2.3.0.1` accepts only later fork revisions of 2.3.0, so no upstream tag can satisfy it,
+whereas `^2.3` would accept any upstream 2.x tag that reached this repository. The former `v14` branch (required as
+`^14.0@dev`) has been merged into `main` and is no longer maintained. The `upstream` remote is fetched with
+`--no-tags`, and upstream changes are merged, never rebased.
+
 Supported TYPO3 versions:
 
 - 12.4 LTS
