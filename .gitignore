@@ -8,3 +8,4 @@
 /Documentation-GENERATED-temp/
 /.DS_Store
 .cache
+/node_modules/

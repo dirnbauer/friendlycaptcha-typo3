@@ -77,3 +77,12 @@ Checkout the full documentation [Using Friendly Captcha](https://docs.typo3.org/
 This extension was created by [Studio Mitte](https://studiomitte.com) with ♥.
 
 [Find more TYPO3 extensions we have developed](https://www.studiomitte.com/loesungen/typo3) that provide additional features for TYPO3 sites.
+
+### Updating the bundled SDK
+
+Use Node from `.nvmrc` and npm from `packageManager`. `npm ci && npm run build`
+copies the exact pinned `@friendlycaptcha/sdk` compatibility bundle and its MPL
+license/provenance. `npm run check:assets` rejects stale output.
+`npx playwright install chromium && npm run test:js` checks the real shipped SDK
+lifecycle using local frame fixtures. Custom `friendlycaptcha_js_path` values
+continue to take precedence over the default bundle.

@@ -1,0 +1,8 @@
+{
+  "package": "@friendlycaptcha/sdk",
+  "version": "1.1.1",
+  "file": "sdk@1.1.1-site.compat.min.js",
+  "license": "MPL-2.0",
+  "source": "https://registry.npmjs.org/@friendlycaptcha/sdk/-/sdk-1.1.1.tgz",
+  "sha256": "c38df3b357872bf86ee629ee6954774582bc6edd0f3f1c855ad0b573904cbb11"
+}
