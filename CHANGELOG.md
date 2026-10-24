@@ -4,6 +4,11 @@ This file lists the releases of [dirnbauer/friendlycaptcha-typo3](https://github
 Upstream's own changes are in the
 [upstream releases](https://github.com/studiomitte/friendlycaptcha-typo3/releases).
 
+## 2.3.0.4 - 2026-10-24
+
+- Remove the obsolete Composer post-autoload callback to `ExtensionTestEnvironment::prepare`: neither supported testing-framework 8.3.3 nor 9.7.0 provides that class. The extension's unit bootstrap remains responsible for setup.
+- Add a regression that verifies every registered Composer class callback is callable against the actual installed development dependencies. Keep every TYPO3/PHP/lowest/highest CI matrix and SDK asset unchanged.
+
 ## 2.3.0.3 - 2026-10-24
 
 - Ship the current Friendly Captcha v2 SDK 1.1.1 as the default self-hosted bundle. Preserve explicitly configured custom paths and retain the older named asset for compatibility.
